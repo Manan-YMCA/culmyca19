@@ -15,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // });
 
 // Mongoose Connection 
-mongoose.connect('mongodb://naman:naman123@ds255364.mlab.com:55364/zomato',{ useNewUrlParser: true })
+mongoose.connect('mongodb://namansachdeva:namansachdeva12@ds159204.mlab.com:59204/culmyca19',{ useNewUrlParser: true })
 
 var db = mongoose.connection;
 
