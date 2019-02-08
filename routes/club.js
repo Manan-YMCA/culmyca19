@@ -9,7 +9,6 @@ var Sponsor =  require('../models/sponsors');
 function BrixxloggedIn(req, res, next) {
   console.log(req.user.username);
     if (req.user.username == 'brixx') {
-      console.log("hello");
         next();
     } else {
         res.redirect('/');
@@ -79,8 +78,16 @@ router.get('/login',function(req,res){
 	res.render('login');
 });
 
-router.post('/addsponsor', BrixxloggedIn, function(req, res, next) {
+router.get('/showsponsor',function(req,res){
+    Sponsor.find({ },function(err,result){
+      if(err) 
+        console.log("Some Error Occur");
+      else
+        res.json(result);
+    });
+});  
 
+router.post('/addsponsor', BrixxloggedIn, function(req, res, next) {
         var name = req.body.name;
         var title = req.body.title;
         var rank = req.body.rank;
