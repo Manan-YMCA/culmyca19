@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Delete Event</title>
+</head>
+<body>
+<form method="post" action="/club/deletesponsor">
+Select Sponsor to be deleted
+<select name="id">
+	<% for(var i=0; i<sponsor.length;i++){%>
+<option value = "<%= sponsor[i]._id%>"><%= result[i].name%></option>
+<%}%>
+</select>
+<input type="submit" name="submit">
+</body>
+</html>

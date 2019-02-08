@@ -10,7 +10,7 @@ var EventSchema = mongoose.Schema({
     date: String,
 	starttime: String,
 	endtime: String,
-	coordnator: [{name: String,phone: Number}],
+	coordinator: [{name: String,phone: Number}],
 	prizes: {
         prize1: String,
         prize2: String,
