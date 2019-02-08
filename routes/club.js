@@ -4,6 +4,17 @@ var passport = require('passport');
 const session = require('express-session');
 var LocalStrategy = require('passport-local').Strategy;
 var Admin = require('../models/admins');
+var Sponsor =  require('../models/sponsors');
+
+function BrixxloggedIn(req, res, next) {
+  console.log(req.user.username);
+    if (req.user.username == 'brixx') {
+      console.log("hello");
+        next();
+    } else {
+        res.redirect('/');
+    }
+}
 
 passport.use(new LocalStrategy(
   function(username, password, done) {
@@ -24,12 +35,15 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-
  router.post('/login', 
   passport.authenticate('local', { failureRedirect: '/login' }),
   function(req, res) {
     res.redirect('/');
   });
+
+ router.get('/',require('connect-ensure-login').ensureLoggedIn('/club/login'), function(req,res){
+  res.render('index');
+});
 
   router.get('/logout',
         function (req, res) {
@@ -44,7 +58,6 @@ router.get('/register',function(req,res){
 router.post('/register',function(req,res){
         var username = req.body.username;
         var password = req.body.password;
-
         var newAdmin = new Admin({
             username: username,
             password: password
@@ -66,9 +79,42 @@ router.get('/login',function(req,res){
 	res.render('login');
 });
 
-router.get('/', require('connect-ensure-login').ensureLoggedIn('/club/login'), function(req,res){
-	res.render('index');
-})
+router.post('/addsponsor', BrixxloggedIn, function(req, res, next) {
 
+        var name = req.body.name;
+        var title = req.body.title;
+        var rank = req.body.rank;
+        var logo = req.body.logo;
+        var website = req.body.website;
+        // console.log(name);
+        var newSponsor = new Sponsor({
+            name: name,
+            title: title,
+            rank: rank,
+            logo: logo,
+            website: website
+        });
+        // console.log(newSponsor);
+        Sponsor.create(newSponsor,function(err,sponsor){
+          console.log(sponsor);
+            if(err)
+            {
+                res.redirect('/club/addsponsor');
+            }
+            else
+            {
+                res.redirect('/');
+            }
+        })
+});
+
+router.get('/addsponsor', BrixxloggedIn, function(req, res, next) {
+    // Brixx Logged In
+    res.render('addsponsor')
+});
+
+router.get('/addevent', require('connect-ensure-login').ensureLoggedIn('/club/login'), function(req,res){
+	res.render('addevent');
+})
 
 module.exports = router;

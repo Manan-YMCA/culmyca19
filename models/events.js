@@ -7,9 +7,10 @@ var db = mongoose.connect
 var EventSchema = mongoose.Schema({
 
 	fees: Number,
-	starttime: Date,
-	endtime: Date,
-	coordnates: [{name: String,phone: Number}],
+    date: String,
+	starttime: String,
+	endtime: String,
+	coordnator: [{name: String,phone: Number}],
 	prizes: {
         prize1: String,
         prize2: String,
