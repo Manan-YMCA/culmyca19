@@ -6,8 +6,10 @@ var db = mongoose.connect
 
 var OtpSchema = mongoose.Schema({
 
-	Phone: Number,
+	phone: Number,
+	session_id: String,
 	otp: Number,
+	status: Boolean
 
 });
 var Otp = module.exports = mongoose.model('Otp',OtpSchema);
