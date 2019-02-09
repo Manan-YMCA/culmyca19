@@ -33,27 +33,43 @@ router.post('/sendotp',function(req,res){
   		if (error) throw new Error(error);
   		console.log(body);
   		var obj = JSON.parse(body);
-  		console.log(obj.Details);
 
   		// Check if Phone Already Exist Then Use Update Query rather then Creating New Entry In OTP.
+  			Otp.find({phone: phone}).then(function(result){
 
-  		var newOtp = new Otp({
-            phone: phone,
-            session_id: obj.Details,
-            otp: otp,
-            status: 'false'
-        });
+  				if(result.length > 0)
+  				{
 
-        Otp.create(newOtp,function(err,otp){
-            if(err)
-            {
-                res.redirect('/sendotp');
-            }
-            else
-            {
-                res.redirect('/verifyotp');
-            }
-        })
+					var myquery = { phone: phone };
+					var newvalues = {$set: { session_id: obj.Details, otp: otp } };
+  					Otp.updateOne(myquery, newvalues, function(err, res) {
+      					if (err) throw err;
+					});
+					res.redirect('/verifyotp');
+  				} 
+  				else
+  				{
+			  			var newOtp = new Otp({
+			            phone: phone,
+			            session_id: obj.Details,
+			            otp: otp,
+			            status: 'false'
+			        	});
+
+			        	Otp.create(newOtp,function(err,otp){
+			            if(err)
+			            {
+			                res.redirect('/sendotp');
+			            }
+			            else
+			            {
+			                res.redirect('/verifyotp');
+			            }
+			        });
+
+  				}
+		});
+
 	});
 });
 
@@ -82,7 +98,6 @@ router.post('/verifyotp',function(req,res){
 			  console.log(body);
 			  res.json(body);
 			});
-		
 	});
 });
 module.exports = router;
