@@ -4,6 +4,7 @@ var request = require("request");
 var rn = require('random-number');
 var Otp = require('../models/otps');
 var Event = require('../models/events');
+var Registraion = require('../models/registrations');
 
 //-----------------------------------------Generate OTP----------------------------------------------------------//
 
@@ -126,6 +127,60 @@ router.post('/allevent',function(req,res){
 	Event.find({},function(err,result){
 		res.json(result);
 	});
+});
+
+//-----------------------------------------Event Registration----------------------------------------------------------//
+
+router.get('/register',function(req,res){
+	res.render('register');
+});
+
+router.post('/register',function(req,res){
+
+    var name = req.body.name;
+    var phone = req.body.phone;
+    var email = req.body.email;
+    var college = req.body.college;
+    var eventid = req.body.eventid;
+    var eventname = req.body.eventname;
+    var timestamp = req.body.timestamp;
+
+    Registraion.find({phone:phone, eventid: eventid} ).then(function(result){
+    	if(result.length >0 )
+    	{
+			var obj = {
+			    status: 'Already Registered'
+			};
+    		res.json(obj);
+    	}
+    	else
+    	{
+		    	var newRegistraion  = new Registraion({
+		    	name: name,
+		    	phone: phone,
+		    	email: email,
+		    	college: college,
+		    	eventid: eventid,
+		    	eventname: eventname,
+				timestamp: timestamp,
+				//QRCode Comes Here
+				arrived: 'false',
+				paymentstatus: 'false'    	
+		      });
+			  //console.log(newRegistraion);
+			  Registraion.create(newRegistraion,function(err,registraion){
+			    //console.log(registraion);
+			    if(err)
+			    {
+			      res.redirect('/register');
+			    }
+			    else
+			    {
+			      res.redirect('/');
+			    }
+			  });
+    	}
+    });
 });
 
 module.exports = router;
