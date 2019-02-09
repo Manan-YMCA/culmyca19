@@ -5,6 +5,7 @@ var rn = require('random-number');
 var Otp = require('../models/otps');
 var Event = require('../models/events');
 var Registraion = require('../models/registrations');
+var Sponsor = require('../models/sponsors');
 
 //-----------------------------------------Generate OTP----------------------------------------------------------//
 
@@ -182,5 +183,17 @@ router.post('/register',function(req,res){
     	}
     });
 });
+
+//-----------------------------------------Show Sponsors to Users----------------------------------------------------------//
+
+
+router.get('/showsponsor', function(req,res){
+    Sponsor.find({ },function(err,result){
+      if(err) 
+        console.log("Some Error Occur");
+      else
+        res.json(result);
+    });
+}); 
 
 module.exports = router;
