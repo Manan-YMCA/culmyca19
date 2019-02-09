@@ -3,13 +3,15 @@ let router = express.Router();
 var request = require("request");
 var rn = require('random-number');
 var Otp = require('../models/otps');
+var Event = require('../models/events');
+
+//-----------------------------------------Generate OTP----------------------------------------------------------//
 
 var generateRandom = rn.generator({
   min:  1000,
   max:  9999,
   integer: true
 });
-
 
 router.get('/',function(req,res){
 	res.render('index');
@@ -66,12 +68,14 @@ router.post('/sendotp',function(req,res){
 			                res.redirect('/verifyotp');
 			            }
 			        });
-
   				}
 		});
 
 	});
 });
+
+//-----------------------------------------Verify OTP----------------------------------------------------------//
+
 
 router.get('/verifyotp',function(req,res){
 	res.render('verifyotp');
@@ -100,4 +104,28 @@ router.post('/verifyotp',function(req,res){
 			});
 	});
 });
+
+//-----------------------------------------Show Event Club Wise----------------------------------------------------------//
+
+router.get('/clubevent',function(req,res){
+	res.render('clubevent');
+});
+
+router.post('/clubevent',function(req,res){
+	var club = req.body.club;
+	Event.find({clubname: club},function(err,result){
+		res.json(result);
+	});
+});
+
+router.get('/allevent',function(req,res){
+	res.render('allevent');
+});
+
+router.post('/allevent',function(req,res){
+	Event.find({},function(err,result){
+		res.json(result);
+	});
+});
+
 module.exports = router;
