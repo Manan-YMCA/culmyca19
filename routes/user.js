@@ -3,6 +3,8 @@ let router = express.Router();
 var request = require("request");
 var rn = require('random-number');
 var uniqid = require('uniqid');
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey('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');
 var Otp = require('../models/otps');
 var Event = require('../models/events');
 var Registraion = require('../models/registrations');
@@ -245,5 +247,20 @@ router.post('/updatearrival',function(req,res){
 
 });
 
+
+//-----------------------------------------SendGrid Demo For Sending Mails----------------------------------------------------------//
+
+router.post('/sendmail',function(req,res){
+
+	const msg = {
+	  to: 'princebatra2315@gmail.com',
+	  from: 'prince.etraffic@gmail.com',
+	  subject: 'Sending with SendGrid is Fun',
+	  text: 'and easy to do anywhere, even with Node.js',
+	  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+	};
+	sgMail.send(msg);
+	res.redirect('/');
+});
 
 module.exports = router;
