@@ -2,6 +2,7 @@ var express = require('express');
 let router = express.Router();
 var request = require("request");
 var rn = require('random-number');
+var uniqid = require('uniqid');
 var Otp = require('../models/otps');
 var Event = require('../models/events');
 var Registraion = require('../models/registrations');
@@ -43,7 +44,6 @@ router.post('/sendotp',function(req,res){
 
   				if(result.length > 0)
   				{
-
 					var myquery = { phone: phone };
 					var newvalues = {$set: { session_id: obj.Details, otp: otp } };
   					Otp.updateOne(myquery, newvalues, function(err, res) {
@@ -145,7 +145,9 @@ router.post('/register',function(req,res){
     var eventid = req.body.eventid;
     var eventname = req.body.eventname;
     var timestamp = req.body.timestamp;
-
+    var str = uniqid.time();
+    str = str + Math.random().toString(36).substring(2,10);
+    var qrcode = str;
     Registraion.find({phone:phone, eventid: eventid} ).then(function(result){
     	if(result.length >0 )
     	{
@@ -164,7 +166,7 @@ router.post('/register',function(req,res){
 		    	eventid: eventid,
 		    	eventname: eventname,
 				timestamp: timestamp,
-				//QRCode Comes Here
+				qrcode: qrcode,
 				arrived: 'false',
 				paymentstatus: 'false'    	
 		      });
@@ -186,7 +188,6 @@ router.post('/register',function(req,res){
 
 //-----------------------------------------Show Sponsors to Users----------------------------------------------------------//
 
-
 router.get('/showsponsor', function(req,res){
     Sponsor.find({ },function(err,result){
       if(err) 
@@ -195,5 +196,54 @@ router.get('/showsponsor', function(req,res){
         res.json(result);
     });
 }); 
+
+//-----------------------------------------Update Payment Status----------------------------------------------------------//
+
+router.get('/updatepayment',function(req,res){
+	res.render('updatepayment');
+});
+
+router.post('/updatepayment',function(req,res){
+
+	var qrcode = req.body.qrcode;
+	var myquery = { qrcode: qrcode };
+	var newvalues = {$set: { paymentstatus: 'true' } };
+	Registraion.updateOne(myquery, newvalues, function(err, res) {
+		if (err) throw err;
+	});	
+	res.redirect('/');
+
+});
+
+//-----------------------------------------Update Arrival Status----------------------------------------------------------//
+
+router.get('/updatearrival',function(req,res){
+	res.render('updatearrival');
+});
+
+router.post('/updatearrival',function(req,res){
+
+	var qrcode = req.body.qrcode;
+	Registraion.find({qrcode: qrcode}).then(function(result){
+		if(result[0].paymentstatus)
+		{	
+			var myquery = { qrcode: qrcode };
+			var newvalues = {$set: { arrived: 'true' } };
+			Registraion.updateOne(myquery, newvalues, function(err, res) {
+				if (err) throw err;
+			});	
+			res.redirect('/');	
+		}
+		else
+		{
+			var obj = {
+			    status: 'Payment Not Done Till Now'
+			};
+			res.json(obj);
+		}
+	});
+
+});
+
 
 module.exports = router;
