@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Show Events</title>
+</head>
+<body>
+<ul>
+	<%for(var i=0;i<event.length;i++){%>
+	<li>
+		<%=event[i].title%>
+		<form method="post" action="/club/updateformEvent">
+			<input type="hidden" value = "<%=event[i]._id%>" name ="id">
+			<input type="submit" value="update">
+	</form>
+	</li>
+<%}%>
+</ul>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Show Sponsor</title>
+</head>
+<body>
+<ul>
+	<%for(var i=0;i<sponsor.length;i++){%>
+	<li>
+		<%=sponsor[i].name%>
+		<form method="post" action="/club/updateFormSponsor">
+			<input type="hidden" value = "<%=sponsor[i]._id%>" name ="id">
+			<input type="submit" value="update">
+	</form>
+	</li>
+<%}%>
+</ul>
+</body>
+</html>
