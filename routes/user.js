@@ -253,14 +253,28 @@ router.post('/updatearrival',function(req,res){
 router.post('/sendmail',function(req,res){
 
 	const msg = {
-	  to: 'princebatra2315@gmail.com',
-	  from: 'prince.etraffic@gmail.com',
-	  subject: 'Sending with SendGrid is Fun',
-	  text: 'and easy to do anywhere, even with Node.js',
-	  html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+	  to: 'manmeetrana06@gmail.com',
+	  from: 'onelms.sitrain.industry@siemens.com',
+	  subject: 'Result of SMSCP final exam',
+	  text: 'Hello',
+	  html: '<strong>Hi Manmeet</strong><br><br>Thank you for your interest in SMSCP Siemens.<br>We regret to inform you that after careful consideration you were not able to get the minimum score which is 50 out of 100 in your SMSCP final exam.<br>Thank you again for your interest and we wish you the best in your future endeavors.<br><br> All the best!<br>Siemens</strong>',
 	};
+
 	sgMail.send(msg);
 	res.redirect('/');
+});
+
+//-----------------------------------------My Tickets----------------------------------------------------------//
+
+router.get('/mytickets',function(req,res){
+	res.render('mytickets');
+});
+
+router.post('/mytickets',function(req,res){
+	var phone = req.body.phone;
+	Registraion.find({phone:phone}).then(function(result){
+		res.json(result);
+	});
 });
 
 module.exports = router;
