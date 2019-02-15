@@ -263,7 +263,20 @@ router.post('/sendmail',function(req,res){
 	sgMail.send(msg);
 	res.redirect('/');
 });
-
+//-------------------------------------Route For Increasing Hit Count----------------------------------//
+router.get('/events',function(req,res){
+	Event.updateOne({_id : req.query.id},{$set : {hitCount : parseInt(req.query.hit) +1}},function(error,result){
+		if(error)
+		{
+			console.log("Error Occur");
+			res.json({success : false});
+		}
+		else
+		{
+			res.json({success : true});
+		}
+	})
+})
 //-----------------------------------------My Tickets----------------------------------------------------------//
 
 router.get('/mytickets',function(req,res){

@@ -171,44 +171,28 @@ router.get('/addevent', require('connect-ensure-login').ensureLoggedIn('/club/lo
 /*------------------POST ROUTE FOR ADD EVENT-------------------------------------------*/
 
 router.post('/addevent',require('connect-ensure-login').ensureLoggedIn('/club/login'),function(req,res){
-  var clubname = req.user.username;
-  var title = req.body.title;
-  var category = req.body.category;
-  var eventtype = req.body.eventtype;
-  var coordinatorName = req.body.coordinatorName;
-  var coordinatorPhone = req.body.coordinatorPhone;
-  var prize1 = req.body.prize1;
-  var prize2 = req.body.prize2;
-  var prize3 = req.body.prize3;
-  var description = req.body.description;
-  var photolink = req.body.photolink;
-  var venue = req.body.venue;
-  var fee = req.body.fee;
-  var date = req.body.date;
-  var starttime = req.body.starttime;
-  var endtime = req.body.endtime;
   var newEvent  = new Event({
-    clubname : clubname,
-    title : title,
-    eventtype : eventtype,
-    category : category,
-    description : description,
-    venue : venue,
-    photolink : photolink,
+    clubname : req.user.username,
+    hitCount : 0,
+    title : req.body.title,
+    eventtype : req.body.eventtype,
+    category : req.body.category,
+    description : req.body.description,
+    venue : req.body.venue,
+    photolink : req.body.photolink,
     prizes : {
-      prize1 : prize1,
-      prize2 : prize2,
-      prize3 : prize3,
+      prize1 : req.body.prize1,
+      prize2 : req.body.prize2,
+      prize3 : req.body.prize3,
     },
-    coordinator : [{name : coordinatorName,phone : coordinatorPhone}],
-    fees : fee,
-    date : date,
-    starttime : starttime,
-    endtime : endtime,
+    coordinator : [{name : req.body.coordinatorName,phone : req.body.coordinatorPhone}],
+    fees : req.body.fee,
+    date : req.body.date,
+    starttime : req.body.starttime,
+    endtime : req.body.endtime,
+    tags : req.body.tags,
   });
-  //console.log(newEvent);
   Event.create(newEvent,function(err,event){
-    //console.log(event);
     if(err)
     {
       res.redirect('/club/addevent');
@@ -238,39 +222,25 @@ router.post('/updateFormEvent',require('connect-ensure-login').ensureLoggedIn('/
 /*--------------------------ROUTE FOR UPDATING THE EVENT---------------------------------*/
 router.post('/updateevent',require('connect-ensure-login').ensureLoggedIn('/club/login'),function(req,res){
   var query = req.body.id;
-  var clubname = req.user.username;
-  var title = req.body.title;
-  var category = req.body.category;
-  var eventtype = req.body.eventtype;
-  var coordinatorName = req.body.coordinatorName;
-  var coordinatorPhone = req.body.coordinatorPhone;
-  var prize1 = req.body.prize1;
-  var prize2 = req.body.prize2;
-  var prize3 = req.body.prize3;
-  var description = req.body.description;
-  var photolink = req.body.photolink;
-  var venue = req.body.venue;
-  var fee = req.body.fee;
-  var date = req.body.date;
-  var starttime = req.body.starttime;
-  var endtime = req.body.endtime;
   var newValues = {$set : {
-    title : title,
-    eventtype : eventtype,
-    category : category,
-    description : description,
-    venue : venue,
-    photolink : photolink,
+    title : req.body.title,
+    eventtype : req.body.eventtype,
+    category : req.body.category,
+    hitCount : req.body.hitCount,
+    description : req.body.description,
+    venue : req.body.venue,
+    photolink : req.body.photolink,
     prizes : {
-      prize1 : prize1,
-      prize2 : prize2,
-      prize3 : prize3,
+      prize1 : req.body.prize1,
+      prize2 : req.body.prize2,
+      prize3 : req.body.prize3,
     },
-    coordinator : [{name : coordinatorName,phone : coordinatorPhone}],
-    fees : fee,
-    date : date,
-    starttime : starttime,
-    endtime : endtime,
+    coordinator : [{name : req.body.coordinatorName,phone : req.body.coordinatorPhone}],
+    fees : req.body.fee,
+    date : req.body.date,
+    starttime : req.body.starttime,
+    endtime : req.body.endtime,
+    tags : req.body.tags,
   }};
   Event.updateOne({_id:query},newValues,function(error,result){
     if(error)

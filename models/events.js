@@ -23,6 +23,8 @@ var EventSchema = mongoose.Schema({
     description: String,
     venue: String,
     photolink: String,
+    tags : [String],
+    hitCount : Number,
     winner: {
         winner1: String,
         winner2: String,
