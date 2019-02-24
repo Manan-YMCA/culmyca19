@@ -3,6 +3,7 @@ let router = express.Router();
 var request = require("request");
 var rn = require('random-number');
 var uniqid = require('uniqid');
+var async = require("async");
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey('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');
 var Otp = require('../models/otps');
@@ -264,7 +265,7 @@ router.post('/sendmail',function(req,res){
 	res.redirect('/');
 });
 
-//-------------------------------------Route For Increasing Hit Count----------------------------------//
+//----------------------------------------Increase Hit Count----------------------------------------------//
 
 router.get('/updateTrending',function(req,res){
 	Event.updateOne({_id : req.query.id},{$set : {hitCount : parseInt(req.query.hit) +1}},function(error,result){
@@ -280,7 +281,7 @@ router.get('/updateTrending',function(req,res){
 	})
 })
 
-//-------------------------------------Route For Increasing Hit Count----------------------------------//
+//-----------------------------------------------Showing Trending---------------------------------------------//
 
 function compare(a,b) {
   if (a.hitCount < b.hitCount)
@@ -310,6 +311,32 @@ router.post('/mytickets',function(req,res){
 	Registraion.find({phone:phone}).then(function(result){
 		res.json(result);
 	});
+});
+
+
+//-----------------------------------------------Events By Tags---------------------------------------------//
+
+
+
+router.post('/showbytag',function(req,res){
+
+	var arr = [];
+	var tag = req.body.tag;
+  	Event.find({ }).then(function(result) {
+  	var i = 0;
+    async.each(result,function(item){
+    		var ans = result[i].tags;
+    		var ele = ans.indexOf(tag,0);
+    		if(ele!=-1)
+     		arr.push(item);
+                i++;
+            },function(err){
+              res.json(arr);
+            });
+            if(i == result.length)
+               res.json(arr);
+  });
+            	
 });
 
 module.exports = router;
