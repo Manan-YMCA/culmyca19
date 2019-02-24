@@ -263,8 +263,10 @@ router.post('/sendmail',function(req,res){
 	sgMail.send(msg);
 	res.redirect('/');
 });
+
 //-------------------------------------Route For Increasing Hit Count----------------------------------//
-router.get('/events',function(req,res){
+
+router.get('/updateTrending',function(req,res){
 	Event.updateOne({_id : req.query.id},{$set : {hitCount : parseInt(req.query.hit) +1}},function(error,result){
 		if(error)
 		{
@@ -277,6 +279,26 @@ router.get('/events',function(req,res){
 		}
 	})
 })
+
+//-------------------------------------Route For Increasing Hit Count----------------------------------//
+
+function compare(a,b) {
+  if (a.hitCount < b.hitCount)
+    return 1;
+  if (a.hitCount > b.hitCount)
+    return -1;
+  return 0;
+}
+
+router.get('/showTrending',function(req,res){
+
+  	Event.find({ },function(err, result) {
+    if (err) throw err;
+    result.sort(compare);
+    res.json(result);
+  });	
+});
+
 //-----------------------------------------My Tickets----------------------------------------------------------//
 
 router.get('/mytickets',function(req,res){
