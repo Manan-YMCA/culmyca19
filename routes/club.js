@@ -257,7 +257,6 @@ router.post('/updateevent',require('connect-ensure-login').ensureLoggedIn('/club
 })
 
 
-
 /*route for showing list of events for the club */
 router.get('/showevent',require('connect-ensure-login').ensureLoggedIn('/club/login'),function(req,res){
     Event.find({clubname:req.user.username},function(err,result){
@@ -267,7 +266,7 @@ router.get('/showevent',require('connect-ensure-login').ensureLoggedIn('/club/lo
       }
       else
       {
-        res.render('adminshowevent',{event : result});
+        res.json(result);
       }
     })
 });

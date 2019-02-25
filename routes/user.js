@@ -308,15 +308,15 @@ router.get('/mytickets',function(req,res){
 
 router.post('/mytickets',function(req,res){
 	var phone = req.body.phone;
+	console.log(phone);
 	Registraion.find({phone:phone}).then(function(result){
+		console.log(result.length)
 		res.json(result);
 	});
 });
 
 
 //-----------------------------------------------Events By Tags---------------------------------------------//
-
-
 
 router.post('/showbytag',function(req,res){
 
@@ -325,7 +325,7 @@ router.post('/showbytag',function(req,res){
   	Event.find({ }).then(function(result) {
   	var i = 0;
     async.each(result,function(item){
-    		var ans = result[i].tags;
+    		var ans = result[i].tags;  // Here I get a tag
     		var ele = ans.indexOf(tag,0);
     		if(ele!=-1)
      		arr.push(item);
