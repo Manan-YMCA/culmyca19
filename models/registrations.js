@@ -15,7 +15,8 @@ var RegistrationSchema = mongoose.Schema({
     college: String,
     eventid: String,
     eventname: String,
-    timestamp: Date
+    timestamp: Date,
+    team : [{name : String,phone : Number}]
 });
 var Registration = module.exports = mongoose.model('Registration',RegistrationSchema);
 module.exports.createRegistration = function(newRegistration,callback){

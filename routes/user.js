@@ -163,6 +163,7 @@ router.post('/register',function(req,res){
     var college = req.body.college;
     var eventid = req.body.eventid;
     var eventname = req.body.eventname;
+    var team = req.body.team;
     var timestamp = req.body.timestamp;
     var str = uniqid.time();
     str = str + Math.random().toString(36).substring(2,10);
@@ -185,6 +186,7 @@ router.post('/register',function(req,res){
 		    	eventid: eventid,
 		    	eventname: eventname,
 				timestamp: timestamp,
+				team : team,
 				qrcode: qrcode,
 				arrived: 'false',
 				paymentstatus: 'false'    	
@@ -194,11 +196,19 @@ router.post('/register',function(req,res){
 			    //console.log(registraion);
 			    if(err)
 			    {
-			      res.redirect('/register');
+			      var obj = {
+				    status: 'Failed!!Error Occured'
+					};
+				res.send(obj);
+				res.end();
 			    }
 			    else
 			    {
-			      res.redirect('/');
+			      var obj = {
+				    status: 'Success'
+					};
+				res.send(obj);
+				res.end();
 			    }
 			  });
     	}
