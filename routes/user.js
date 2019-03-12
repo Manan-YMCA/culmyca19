@@ -130,6 +130,13 @@ router.post('/eventbyid',(req,res)=>{
 	});
 });
 
+//---------------------------------SHOW EVENTS CATEGORY AND TITLE ONLY-----------------------------------//
+router.post('/eventname',(req,res)=>{
+	Event.find({},{'title':true, 'category':true},(error,result)=>{
+		res.json(result);
+	})
+});
+
 router.get('/allevent',function(req,res){
 	res.render('allevent');
 });
@@ -139,6 +146,8 @@ router.post('/allevent',function(req,res){
 		res.json(result);
 	});
 });
+
+
 
 //-----------------------------------------Event Registration----------------------------------------------------------//
 
