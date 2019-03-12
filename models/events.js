@@ -21,6 +21,8 @@ var EventSchema = mongoose.Schema({
     clubname: String,
     category: String,
     description: String,
+    rule : String,
+    teamSize : String,
     venue: String,
     photolink: String,
     tags : [String],

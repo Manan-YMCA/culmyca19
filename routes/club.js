@@ -178,6 +178,8 @@ router.post('/addevent',require('connect-ensure-login').ensureLoggedIn('/club/lo
     eventtype : req.body.eventtype,
     category : req.body.category,
     description : req.body.description,
+    rule : req.body.rule,
+    teamSize : req.body.teamsize,
     venue : req.body.venue,
     photolink : req.body.photolink,
     prizes : {

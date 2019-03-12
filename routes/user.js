@@ -115,10 +115,17 @@ router.post('/verifyotp',function(req,res){
 router.get('/clubevent',function(req,res){
 	res.render('clubevent');
 });
-
+//----------------------------------------Send event name and id by club------------------------------------------//
 router.post('/clubevent',function(req,res){
 	var club = req.body.club;
-	Event.find({clubname: club},function(err,result){
+	Event.find({clubname: club},'title',function(err,result){
+		res.json(result);
+	});
+});
+//---------------------------------Find Event By ID----------------------------------------------------//
+router.post('/eventbyid',(req,res)=>{
+	//console.log(req.body.id);
+	Event.findById(req.body.id,(error,result)=>{
 		res.json(result);
 	});
 });
