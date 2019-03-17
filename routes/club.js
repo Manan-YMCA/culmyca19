@@ -18,7 +18,8 @@ function BrixxloggedIn(req, res, next) {
 }
 
 function verifyToken(req, res, next) {
-  var token = req.headers['x-access-token'];
+  var token = req.headers['auth'];
+  console.log('auth : '+ token);
   if (!token) 
     return res.status(403).send({ auth: false, message: 'No token provided.' });
   jwt.verify(token, config.secret, function(err, decoded) {      
@@ -33,14 +34,14 @@ function verifyToken(req, res, next) {
 router.post('/login', function(req, res) {
 
   Admin.findOne({ username: req.body.username }, function (err, user) {
-    if (err) return res.status(500).send('Error on the server.');
-    if (!user) return res.status(404).send('No user found.');
+    if (err) return res.status(500).send({ 'msg': 'Eror on Server', 'token': null,'username' :null});
+    if (!user) return res.status(404).send({ 'msg': 'user does not exist', 'token': null,'username' :null});
     var passwordIsValid = (req.body.password===user.password);
-    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+    if (!passwordIsValid) return res.status(401).send({ 'msg': 'password is not valid', 'token': null,'username' :null});
     var token = jwt.sign({ id: user._id }, config.secret, {
       expiresIn: 86400 
     });
-    res.status(200).send({ auth: true, token: token });
+    res.status(200).send({ 'msg': 'success', 'token': token,'username' : user.username});
   });
 
 });
@@ -160,105 +161,149 @@ router.get('/addevent', verifyToken, function(req,res){
 
 /*------------------POST ROUTE FOR ADD EVENT-------------------------------------------*/
 
-router.post('/addevent',verifyToken,function(req,res){
-  var newEvent  = new Event({
-    clubname : req.user.username,
-    hitCount : 0,
-    title : req.body.title,
-    eventtype : req.body.eventtype,
-    category : req.body.category,
-    description : req.body.description,
-    rule : req.body.rule,
-    teamSize : req.body.teamsize,
-    venue : req.body.venue,
-    photolink : req.body.photolink,
-    prizes : {
-      prize1 : req.body.prize1,
-      prize2 : req.body.prize2,
-      prize3 : req.body.prize3,
-    },
-    coordinator : [{name : req.body.coordinatorName,phone : req.body.coordinatorPhone}],
-    fees : req.body.fee,
-    date : req.body.date,
-    starttime : req.body.starttime,
-    endtime : req.body.endtime,
-    tags : req.body.tags,
-  });
-  Event.create(newEvent,function(err,event){
-    if(err)
-    {
-      res.redirect('/club/addevent');
-    }
-    else
-    {
-      res.redirect('/');
-    }
-  })
+router.post('/events/add',function(req,res){
+    var token = req.body.token;
+    var userId;
+    if (!token) 
+      res.status(403).send({'msg': 'No token provided.' });
+    jwt.verify(token, config.secret, function(err, decoded) {      
+      if (err) 
+        res.status(500).send({'msg': 'Failed to authenticate token.' });    
+      userId = decoded.id;
+    });
+    Admin.findById(userId,(error,admin)=>{
+      if(error)
+        res.send({'msg':'Server Error'});
+      else
+      {
+        if(admin.username==req.body.clubname)
+        {
+          var newEvent  = new Event({
+            clubname : req.body.clubname,
+            hitCount : 0,
+            title : req.body.title,
+            eventtype : req.body.eventtype,
+            category : req.body.category,
+            desc : req.body.desc,
+            rules : req.body.rules,
+            fee : req.body.fee,
+            venue : req.body.venue,
+            photolink : req.body.photolink,
+            prizes : {
+              prize1 : req.body.prize1,
+              prize2 : req.body.prize2,
+              prize3 : req.body.prize3,
+            },
+            coordinators : [{name : req.body.coord1name,phone : req.body.coord1phone},{name : req.body.coord2name,phone : req.body.coord2phone}],
+            timing : {
+              from : req.body.from,
+              to : req.body.to,
+            },
+            tags : req.body.tags,
+          });
+          Event.create(newEvent,function(err,event){
+            if(err)
+            {
+              res.send({'msg':'Error in Creating Event Please enter valid date and time'});
+            }
+            else
+            {
+              res.json({'msg':'Event Created'});
+            }
+          })
+        }
+        else
+        {
+          res.send({'msg':'You are not allowed to create another club event'});
+        }
+      }
+    });
+});
+
+/*--------------------------ROUTE FOR UPDATING THE EVENT---------------------------------*/
+router.post('/events/update',function(req,res){
+  var token = req.body.token;
+    var userId;
+    if (!token) 
+      res.status(403).send({'msg': 'No token provided.' });
+    jwt.verify(token, config.secret, function(err, decoded) {      
+      if (err) 
+        res.status(500).send({'msg': 'Failed to authenticate token.' });    
+      userId = decoded.id;
+    });
+    Admin.findById(userId,(error,admin)=>{
+      if(error)
+        res.send({'msg':'Server Error'});
+      else
+      {
+        if(admin.username==req.body.clubname)
+        {
+          var newEvent  = {
+            clubname : req.body.clubname,
+            hitCount : 0,
+            title : req.body.title,
+            eventtype : req.body.eventtype,
+            category : req.body.category,
+            desc : req.body.desc,
+            rules : req.body.rules,
+            fee : req.body.fee,
+            venue : req.body.venue,
+            photolink : req.body.photolink,
+            prizes : {
+              prize1 : req.body.prize1,
+              prize2 : req.body.prize2,
+              prize3 : req.body.prize3,
+            },
+            coordinators : [{name : req.body.coord1name,phone : req.body.coord1phone},{name : req.body.coord2name,phone : req.body.coord2phone}],
+            timing : {
+              from : req.body.from,
+              to : req.body.to,
+            },
+            tags : req.body.tags,
+          };
+          var query = {'title': req.body.title,'clubname':req.body.clubname};
+          Event.update(query,newEvent,function(error,result){
+            if(error)
+            {
+              res.send({'msg':'Error in Updating Event Please enter valid date and time'});
+            }
+            else
+            {
+              //console.log(result);
+              res.json({'msg':'Event Updated Successfully'});
+            }
+          })
+        }
+        else
+        {
+          res.send({'msg':'You are not allowed to update another club event'});
+        }
+      }
+    });
 });
 
 
-/*------------------FORM RENDERING FOR THE UPDATE EVENT------------------------------------*/
-router.post('/updateFormEvent',verifyToken,function(req,res){
-  Event.findOne({_id : req.body.id},function(error,result){
-      if(error)
-      {
-        console.log("Error Occured");
-      }
-      else
-      {
-        res.render('updateevent',{event : result});
-      }
-  })
-})
-
-/*--------------------------ROUTE FOR UPDATING THE EVENT---------------------------------*/
-router.post('/updateevent',verifyToken,function(req,res){
-  var query = req.body.id;
-  var newValues = {$set : {
-    title : req.body.title,
-    eventtype : req.body.eventtype,
-    category : req.body.category,
-    hitCount : req.body.hitCount,
-    description : req.body.description,
-    venue : req.body.venue,
-    photolink : req.body.photolink,
-    prizes : {
-      prize1 : req.body.prize1,
-      prize2 : req.body.prize2,
-      prize3 : req.body.prize3,
-    },
-    coordinator : [{name : req.body.coordinatorName,phone : req.body.coordinatorPhone}],
-    fees : req.body.fee,
-    date : req.body.date,
-    starttime : req.body.starttime,
-    endtime : req.body.endtime,
-    tags : req.body.tags,
-  }};
-  Event.updateOne({_id:query},newValues,function(error,result){
-    if(error)
-    {
-      console.log("Error Occcured");
-    }
-    else
-    {
-      console.log(result);
-      res.redirect('/club/showevent');
-    }
-  })
-
-})
-
-
 /*route for showing list of events for the club */
-router.get('/showevent',verifyToken,function(req,res){
-    Event.find({clubname:req.user.username},function(err,result){
+router.get('/events/:eventname/:clubname',function(req,res){
+    var condtn;
+    eventname = req.params.eventname;
+    clubname = req.params.clubname;
+    if(eventname=="*" && clubname=="*")
+      condtn = {};
+    else if(eventname=="*")
+      condtn = {clubname : clubname};
+    else
+      condtn = {clubname:clubname,title:eventname};
+    Event.find(condtn,function(err,result){
       if(err)
       {
-        console.log("Something very bad happens");
+        var response = {'success': 0,'msg' : 'error Occured','data':[]};
+        res.send(JSON.stringify(response));
       }
       else
       {
-        res.json(result);
+        var response = {'success': 0,'msg' : 'success','data':result};
+        res.send(JSON.stringify(response));
       }
     })
 });
