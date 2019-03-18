@@ -35,9 +35,9 @@ router.post('/login', function(req, res) {
 
   Admin.findOne({ username: req.body.username }, function (err, user) {
     if (err) return res.status(500).send({ 'msg': 'Eror on Server', 'token': null,'username' :null});
-    if (!user) return res.status(404).send({ 'msg': 'user does not exist', 'token': null,'username' :null});
+    if (!user) return res.status(200).send({ 'msg': 'Wrong username and password pair!', 'token': null,'username' :null});
     var passwordIsValid = (req.body.password===user.password);
-    if (!passwordIsValid) return res.status(401).send({ 'msg': 'password is not valid', 'token': null,'username' :null});
+    if (!passwordIsValid) return res.status(200).send({ 'msg': 'Wrong username and password pair!', 'token': null,'username' :null});
     var token = jwt.sign({ id: user._id }, config.secret, {
       expiresIn: 86400 
     });
