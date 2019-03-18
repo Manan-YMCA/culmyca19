@@ -3,6 +3,7 @@ let router = express.Router();
 var Admin = require('../models/admins');
 var Sponsor =  require('../models/sponsors');
 var Event =  require('../models/events');
+var Registration = require('../models/registrations');
 var jwt = require('jsonwebtoken'); 
 var config = require('../config'); 
 
@@ -367,5 +368,14 @@ router.post('/deletesponsor',BrixxloggedIn,function(req,res){
   })
 });
 
+/*-----------------------------------GET ROUTE FOR GETTING REGISTRATION BY EVENTNAME-----------------------------------*/
+
+router.get('/:clubname/:eventname',function(req,res){
+  var clubname = req.params.clubname;
+  var eventname = req.params.eventname;
+  Registration.find({eventname: eventname}).then(function(result){
+    res.json(result);
+  });
+});
 
 module.exports = router;
