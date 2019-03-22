@@ -10,6 +10,7 @@ var Otp = require('../models/otps');
 var Event = require('../models/events');
 var Registraion = require('../models/registrations');
 var Sponsor = require('../models/sponsors');
+var User = require('../models/users')
 
 //-----------------------------------------Generate OTP----------------------------------------------------------//
 
@@ -341,6 +342,34 @@ router.post('/mytickets',function(req,res){
 	});
 });
 
+//-----------------------------------------------User SignUp---------------------------------------------//
+
+router.post('/users',function(req,res){
+
+
+	var newUser  = new User({
+		name: req.body.name,
+		phone: req.body.phone,
+		email: req.body.email,
+		college: req.body.college
+		});
+	User.create(newUser,function(err,user){
+		if(err) res.json({"status":"error"});
+		else
+		res.json({"status":"success","details": user});
+
+	});
+});
+
+router.post('/login',function(req,res){
+	User.find({phone: req.body.phone}).then(function(result){
+		console.log(result);
+		if(result.length==0)
+			res.json({"status":"User Not Exist"});
+		else
+			res.json({"status":"User Exist"});
+	});
+});
 
 //-----------------------------------------------Events By Tags---------------------------------------------//
 
