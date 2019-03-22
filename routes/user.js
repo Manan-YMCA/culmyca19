@@ -131,8 +131,8 @@ router.post('/eventbyid',(req,res)=>{
 });
 
 //---------------------------------SHOW EVENTS CATEGORY AND TITLE ONLY-----------------------------------//
-router.post('/eventname',(req,res)=>{
-	Event.find({},{'title':true, 'category':true},(error,result)=>{
+router.get('/eventname',(req,res)=>{
+	Event.find({},{'title':true, 'clubname':true},(error,result)=>{
 		res.json(result);
 	})
 });
