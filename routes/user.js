@@ -291,11 +291,11 @@ router.get('/pdf/:qrcode',function(req,res){
 })
 router.get('/sendmail/:qrcode',function(req,res){
 	var qrimg  = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+req.params.qrcode+'" alt="" width="110" height="110" border="0" >';
-	var url = '<a href="http://culmyca19.herokuapp.com/pdf/'+req.params.qrcode+'">';
+	var url = '<a href="http://culmyca19.herokuapp.com/pdf/'+req.params.qrcode+'">Click here to download pdf</a>';
 	var html  = '<strong>Hi Manmeet</strong><br>'+qrimg+'<br><br>'+url+'<br><br>Thank you for your interest in SMSCP Siemens.<br>We regret to inform you that after careful consideration you were not able to get the minimum score which is 50 out of 100 in your SMSCP final exam.<br>Thank you again for your interest and we wish you the best in your future endeavors.<br><br> All the best!<br>Siemens</strong>';
 	const msg = {
-	  to: 'manmeetrana06@gmail.com',
-	  from: 'onelms.sitrain.industry@siemens.com',
+	  to: ['princebatra2315@gmail.com'],
+	  from: 'manmeetrana06@gmail.com',
 	  subject: 'Result of SMSCP final exam',
 	  text: 'Hello',
 	  html : html,
