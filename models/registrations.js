@@ -16,6 +16,7 @@ var RegistrationSchema = mongoose.Schema({
     eventid: String,
     eventname: String,
     timestamp: Date,
+    qrcode:String,
     team : [{name : String,phone : Number}]
 });
 var Registration = module.exports = mongoose.model('Registration',RegistrationSchema);
