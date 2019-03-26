@@ -348,19 +348,28 @@ router.post('/mytickets',function(req,res){
 
 router.post('/users',function(req,res){
 
-
-	var newUser  = new User({
-		name: req.body.name,
-		phone: req.body.phone,
-		email: req.body.email,
-		college: req.body.college
-		});
-	User.create(newUser,function(err,user){
-		if(err) res.json({"status":"error"});
+	var phone = req.body.phone;
+	User.find({phone: phone}).then(function(result)
+	{
+		console.log(result);
+		if(result.length > 0)
+			res.json({"status":"error","details":"User Already Exists"});
 		else
-		res.json({"status":"success","details": user});
-
+		{
+			var newUser  = new User({
+			name: req.body.name,
+			phone: req.body.phone,
+			email: req.body.email,
+			college: req.body.college
+			});
+			User.create(newUser,function(err,user){
+			if(err) res.json({"status":"error"});
+			else
+			res.json({"status":"success","details": user});
+			});
+		}	
 	});
+	
 });
 
 router.post('/login',function(req,res){
