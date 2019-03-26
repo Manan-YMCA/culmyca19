@@ -198,8 +198,7 @@ router.post('/register',function(req,res){
 			    if(err)
 			    {
 			      var obj = {
-				    status: 'Failed!!Error Occured',
-				    qrcode: registraion.qrcode
+				    status: 'Failed!!Error Occured'
 					};
 				res.send(obj);
 				res.end();
