@@ -157,16 +157,17 @@ router.get('/register',function(req,res){
 });
 
 router.post('/register',function(req,res){
-
+	console.log(req.body);
     var name = req.body.name;
     var phone = req.body.phone;
     var email = req.body.email;
     var college = req.body.college;
     var eventid = req.body.eventid;
     var eventname = req.body.eventname;
-    var team = req.body.team;
+    var team = JSON.parse(req.body.team);
     var timestamp = req.body.timestamp;
     var str = uniqid.time();
+    console.log(team);
     str = str + Math.random().toString(36).substring(2,10);
     var qrcode = str;
     Registraion.find({phone:phone, eventid: eventid} ).then(function(result){
@@ -192,7 +193,7 @@ router.post('/register',function(req,res){
 				arrived: 'false',
 				paymentstatus: 'false'    	
 		      });
-			  //console.log(newRegistraion);
+			  console.log(newRegistraion);
 			  Registraion.create(newRegistraion,function(err,registraion){
 			    //console.log(registraion);
 			    if(err)
