@@ -206,7 +206,8 @@ router.post('/register',function(req,res){
 			    else
 			    {
 			      var obj = {
-				    status: 'Success'
+				    status: 'Success',
+				    qrcode: qrcode
 					};
 				res.send(obj);
 				res.end();
