@@ -11,9 +11,7 @@ var Event = require('../models/events');
 var Registraion = require('../models/registrations');
 var Sponsor = require('../models/sponsors');
 var User = require('../models/users')
-var pdf = require('html-pdf');
-var path = require('path');
-var fs = require('fs');
+
 //-----------------------------------------Generate OTP----------------------------------------------------------//
 
 var generateRandom = rn.generator({
@@ -21,8 +19,6 @@ var generateRandom = rn.generator({
   max:  9999,
   integer: true
 });
-
-
 
 router.get('/',function(req,res){
 	res.render('index');
@@ -136,8 +132,8 @@ router.post('/eventbyid',(req,res)=>{
 });
 
 //---------------------------------SHOW EVENTS CATEGORY AND TITLE ONLY-----------------------------------//
-router.get('/eventname',(req,res)=>{
-	Event.find({},{'title':true, 'clubname':true},(error,result)=>{
+router.post('/eventname',(req,res)=>{
+	Event.find({},{'title':true, 'category':true},(error,result)=>{
 		res.json(result);
 	})
 });
@@ -282,28 +278,19 @@ router.post('/updatearrival',function(req,res){
 
 
 //-----------------------------------------SendGrid Demo For Sending Mails----------------------------------------------------------//
-router.get('/pdf/:qrcode',function(req,res){
-	var qrcode = req.params.qrcode;
-	var file = 'public/eticket_'+qrcode+'.pdf';
-	var html  = '<strong>Hi Manmeet</strong><br><br>Thank you for your interest in SMSCP Siemens.<br>We regret to inform you that after careful consideration you were not able to get the minimum score which is 50 out of 100 in your SMSCP final exam.<br>Thank you again for your interest and we wish you the best in your future endeavors.<br><br> All the best!<br>Siemens</strong>';
-	pdf.create(html).toFile(file,function(err, res1){
-		  res.download(file);
-		});
-})
-router.get('/sendmail/:qrcode',function(req,res){
-	var qrimg  = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data='+req.params.qrcode+'" alt="" width="110" height="110" border="0" >';
-	var url = '<a href="http://culmyca19.herokuapp.com/pdf/'+req.params.qrcode+'">Click here to download pdf</a>';
-	var html  = '<strong>Hi Manmeet</strong><br>'+qrimg+'<br><br>'+url+'<br><br>Thank you for your interest in SMSCP Siemens.<br>We regret to inform you that after careful consideration you were not able to get the minimum score which is 50 out of 100 in your SMSCP final exam.<br>Thank you again for your interest and we wish you the best in your future endeavors.<br><br> All the best!<br>Siemens</strong>';
+
+router.post('/sendmail',function(req,res){
+
 	const msg = {
-	  to: ['princebatra2315@gmail.com'],
-	  from: 'manmeetrana06@gmail.com',
+	  to: 'manmeetrana06@gmail.com',
+	  from: 'onelms.sitrain.industry@siemens.com',
 	  subject: 'Result of SMSCP final exam',
 	  text: 'Hello',
-	  html : html,
+	  html: '<strong>Hi Manmeet</strong><br><br>Thank you for your interest in SMSCP Siemens.<br>We regret to inform you that after careful consideration you were not able to get the minimum score which is 50 out of 100 in your SMSCP final exam.<br>Thank you again for your interest and we wish you the best in your future endeavors.<br><br> All the best!<br>Siemens</strong>',
 	};
 
 	sgMail.send(msg);
-	res.send({'msg':'success'});
+	res.redirect('/');
 });
 
 //----------------------------------------Increase Hit Count----------------------------------------------//

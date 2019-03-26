@@ -22,10 +22,10 @@ function verifyToken(req, res, next) {
   var token = req.headers['auth'];
   console.log('auth : '+ token);
   if (!token) 
-    return res.send({ auth: false, 'msg': 'No token provided.' });
+    return res.status(403).send({ auth: false, message: 'No token provided.' });
   jwt.verify(token, config.secret, function(err, decoded) {      
     if (err) 
-      return res.send({ auth: false, 'msg': 'Failed to authenticate token.' });    
+      return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });    
     req.userId = decoded.id;
     next();
   });
@@ -166,10 +166,10 @@ router.post('/events/add',function(req,res){
     var token = req.body.token;
     var userId;
     if (!token) 
-      res.send({'msg': 'No token provided.' });
+      res.status(403).send({'msg': 'No token provided.' });
     jwt.verify(token, config.secret, function(err, decoded) {      
       if (err) 
-        res.send({'msg': 'Failed to authenticate token.' });    
+        res.status(500).send({'msg': 'Failed to authenticate token.' });    
       userId = decoded.id;
     });
     Admin.findById(userId,(error,admin)=>{
@@ -226,10 +226,10 @@ router.post('/events/update',function(req,res){
   var token = req.body.token;
     var userId;
     if (!token) 
-      res.send({'msg': 'No token provided.' });
+      res.status(403).send({'msg': 'No token provided.' });
     jwt.verify(token, config.secret, function(err, decoded) {      
       if (err) 
-        res.send({'msg': 'Failed to authenticate token.' });    
+        res.status(500).send({'msg': 'Failed to authenticate token.' });    
       userId = decoded.id;
     });
     Admin.findById(userId,(error,admin)=>{
