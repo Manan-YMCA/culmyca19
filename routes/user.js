@@ -380,7 +380,8 @@ router.post('/login',function(req,res){
 		if(result.length==0)
 			res.json({"status":"User Not Exist"});
 		else
-			res.json({"status":result[0]});
+			res.json({"status":"User Exist",
+				"data" : result[0]});
 	});
 });
 
