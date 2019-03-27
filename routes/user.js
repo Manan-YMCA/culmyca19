@@ -108,7 +108,7 @@ router.post('/verifyotp',function(req,res){
 			  console.log(body);
 			  res.json(body);
 			});
-	});
+	})
 });
 
 //-----------------------------------------Show Event Club Wise----------------------------------------------------------//
@@ -347,13 +347,15 @@ router.post('/mytickets',function(req,res){
 //-----------------------------------------------User SignUp---------------------------------------------//
 
 router.post('/users',function(req,res){
-
+        console.log("hello");
 	var phone = req.body.phone;
+	console.log(phone);
 	User.find({phone: phone}).then(function(result)
 	{
-		console.log(result);
-		if(result.length > 0)
-			res.json({"status":"error","details":"User Already Exists"});
+	    console.log(result);
+	    console.log(result.length);
+    	if(result.length > 0)
+			res.json({"status":"error","details":result[0]});
 		else
 		{
 			var newUser  = new User({
@@ -378,7 +380,7 @@ router.post('/login',function(req,res){
 		if(result.length==0)
 			res.json({"status":"User Not Exist"});
 		else
-			res.json({"status":"User Exist"});
+			res.json({"status":result[0]});
 	});
 });
 
