@@ -132,7 +132,7 @@ router.post('/eventbyid',(req,res)=>{
 });
 
 //---------------------------------SHOW EVENTS CATEGORY AND TITLE ONLY-----------------------------------//
-router.post('/eventname',(req,res)=>{
+router.get('/eventname',(req,res)=>{
 	Event.find({},{'title':true, 'category':true},(error,result)=>{
 		res.json(result);
 	})
