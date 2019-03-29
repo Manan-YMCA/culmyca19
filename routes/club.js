@@ -226,10 +226,10 @@ router.post('/events/update',function(req,res){
   var token = req.body.token;
     var userId;
     if (!token) 
-      res.status(403).send({'msg': 'No token provided.' });
+      res.send({'msg': 'No token provided.' });
     jwt.verify(token, config.secret, function(err, decoded) {      
       if (err) 
-        res.status(500).send({'msg': 'Failed to authenticate token.' });    
+        res.send({'msg': 'Failed to authenticate token.' });    
       userId = decoded.id;
     });
     Admin.findById(userId,(error,admin)=>{
@@ -239,6 +239,7 @@ router.post('/events/update',function(req,res){
       {
         if(admin.username==req.body.clubname)
         {
+          console.log(req.body);
           var newEvent  = {
             clubname : req.body.clubname,
             hitCount : 0,
@@ -249,7 +250,6 @@ router.post('/events/update',function(req,res){
             rules : req.body.rules,
             fee : req.body.fee,
             venue : req.body.venue,
-            photolink : req.body.photolink,
             prizes : {
               prize1 : req.body.prize1,
               prize2 : req.body.prize2,
@@ -263,20 +263,23 @@ router.post('/events/update',function(req,res){
             tags : req.body.tags,
           };
           var query = {'title': req.body.title,'clubname':req.body.clubname};
+          console.log(newEvent);
           Event.update(query,newEvent,function(error,result){
             if(error)
             {
+              console.log("error in update"+error);
               res.send({'msg':'Error in Updating Event Please enter valid date and time'});
             }
             else
             {
-              //console.log(result);
+              console.log("updated" +result);
               res.json({'msg':'Event Updated Successfully'});
             }
           })
         }
         else
         {
+          console.log('You are not allowed to update another club event');
           res.send({'msg':'You are not allowed to update another club event'});
         }
       }

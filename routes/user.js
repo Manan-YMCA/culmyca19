@@ -108,7 +108,7 @@ router.post('/verifyotp',function(req,res){
 			  console.log(body);
 			  res.json(body);
 			});
-	});
+	})
 });
 
 //-----------------------------------------Show Event Club Wise----------------------------------------------------------//
@@ -132,7 +132,7 @@ router.post('/eventbyid',(req,res)=>{
 });
 
 //---------------------------------SHOW EVENTS CATEGORY AND TITLE ONLY-----------------------------------//
-router.post('/eventname',(req,res)=>{
+router.get('/eventname',(req,res)=>{
 	Event.find({},{'title':true, 'category':true},(error,result)=>{
 		res.json(result);
 	})
@@ -157,16 +157,17 @@ router.get('/register',function(req,res){
 });
 
 router.post('/register',function(req,res){
-
+	console.log(req.body);
     var name = req.body.name;
     var phone = req.body.phone;
     var email = req.body.email;
     var college = req.body.college;
     var eventid = req.body.eventid;
     var eventname = req.body.eventname;
-    var team = req.body.team;
+    var team = JSON.parse(req.body.team);
     var timestamp = req.body.timestamp;
     var str = uniqid.time();
+    console.log(team);
     str = str + Math.random().toString(36).substring(2,10);
     var qrcode = str;
     Registraion.find({phone:phone, eventid: eventid} ).then(function(result){
@@ -192,7 +193,7 @@ router.post('/register',function(req,res){
 				arrived: 'false',
 				paymentstatus: 'false'    	
 		      });
-			  //console.log(newRegistraion);
+			  console.log(newRegistraion);
 			  Registraion.create(newRegistraion,function(err,registraion){
 			    //console.log(registraion);
 			    if(err)
@@ -346,13 +347,15 @@ router.post('/mytickets',function(req,res){
 //-----------------------------------------------User SignUp---------------------------------------------//
 
 router.post('/users',function(req,res){
-
+        console.log("hello");
 	var phone = req.body.phone;
+	console.log(phone);
 	User.find({phone: phone}).then(function(result)
 	{
-		console.log(result);
-		if(result.length > 0)
-			res.json({"status":"error","details":"User Already Exists"});
+	    console.log(result);
+	    console.log(result.length);
+    	if(result.length > 0)
+			res.json({"status":"error","details":result[0]});
 		else
 		{
 			var newUser  = new User({
@@ -377,7 +380,8 @@ router.post('/login',function(req,res){
 		if(result.length==0)
 			res.json({"status":"User Not Exist"});
 		else
-			res.json({"status":"User Exist"});
+			res.json({"status":"User Exist",
+				"data" : result[0]});
 	});
 });
 
