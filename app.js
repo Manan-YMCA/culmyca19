@@ -18,24 +18,24 @@ app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use(function(req, res, next) {
-  var allowedOrigins = ['http://127.0.0.1:3000', 'http://elementsculmyca.com/', 'http://admin.elementsculmyca.com/', 'https://culmyca19.herokuapp.com'];
-  var origin = req.headers.origin;
-  if(allowedOrigins.indexOf(origin) > -1){ 
-       res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-  res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  return next();
-});
-
 // app.use(function(req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//   next();
+//   var allowedOrigins = ['http://127.0.0.1:3000', 'http://elementsculmyca.com/', 'http://admin.elementsculmyca.com/', 'https://culmyca19.herokuapp.com'];
+//   var origin = req.headers.origin;
+//   if(allowedOrigins.indexOf(origin) > -1){ 
+//        res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
+//   res.header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, DELETE');
+//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//   res.header('Access-Control-Allow-Credentials', true);
+//   return next();
 // });
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // Mongoose Connection 
 mongoose.connect('mongodb://namansachdeva:namansachdeva12@ds159204.mlab.com:59204/culmyca19',{ useNewUrlParser: true })
