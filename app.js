@@ -19,7 +19,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use(function(req, res, next) {
-  var allowedOrigins = ['http://127.0.0.1:3000', 'http://elementsculmyca.com/'];
+  var allowedOrigins = ['http://127.0.0.1:3000', 'http://elementsculmyca.com/', 'http://admin.elementsculmyca.com/'];
   var origin = req.headers.origin;
   if(allowedOrigins.indexOf(origin) > -1){ 
        res.setHeader('Access-Control-Allow-Origin', origin);
