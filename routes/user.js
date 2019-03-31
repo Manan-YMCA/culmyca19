@@ -138,6 +138,12 @@ router.get('/eventname',(req,res)=>{
 	})
 });
 
+router.get('/events',(req,res)=>{
+	Event.find({},{'title':true, 'clubname':true},(error,result)=>{
+		res.json(result);
+	})
+});
+
 router.get('/allevent',function(req,res){
 	res.render('allevent');
 });
