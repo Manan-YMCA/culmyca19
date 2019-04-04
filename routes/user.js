@@ -434,10 +434,6 @@ router.get('/pdf/:qrcode',(req,res)=>{
                 }
             }).then(function(){
                 var date=dateHelper(eventinfo.timing.from);
-
-
-
-
                 var html = '<html>'+
                     '<head>'+
                     '  <title>Confirmation</title>'+
@@ -458,7 +454,7 @@ router.get('/pdf/:qrcode',(req,res)=>{
                     '                          <img src="http://www.elementsculmyca.com/images/logo.png" style="display:block;background-color:#1f2533;color:#010101;padding:10px;padding-left:30px" alt="" border="0" height="100" >'+
                     '                        </a>'+
                     '                      </td>'+
-                    '                      <td valign="top" width="300" style="background-color:#1f2533;color:#ffffff;font-size:14px;font-family:Arial,sans-serif;text-align:right;padding:20px 20px 0px 0px;word-spacing:1px"><span style="font-size:20px;font-weight:bold;">ELEMENTS CULMYCA\'18<br/><small>Annual cultural and technical fest</small></span><br><br>YMCA University of Science and Technology<br/>Faridabad, Haryana, India- 121006</td>'+
+                    '                      <td valign="top" width="300" style="background-color:#1f2533;color:#ffffff;font-size:14px;font-family:Arial,sans-serif;text-align:right;padding:20px 20px 0px 0px;word-spacing:1px"><span style="font-size:20px;font-weight:bold;">ELEMENTS CULMYCA\'19<br/><small>Annual cultural and technical fest</small></span><br><br>YMCA University of Science and Technology<br/>Faridabad, Haryana, India- 121006</td>'+
                     '                    </tr>'+
                     '                  </tbody></table>'+
                     '                </td>'+
@@ -597,7 +593,7 @@ router.get('/pdf/:qrcode',(req,res)=>{
                     '                        <tbody><tr>'+
                     '                          <td valign="top" width="540" style="color:#666666;font-size:12px;font-family:Arial,sans-serif;text-align:justify;padding:30px 0 40px;line-height:20px">'+
                     '                            <span style="font-size:12px">'+
-                    '                              <b> Download Culmyca\'18 android application to view and manage all your registrations at one place.</b>'+
+                    '                              <b> Download Culmyca\'19 android application to view and manage all your registrations at one place.</b>'+
                     '                            </span>'+
                     '                            <table>'+
                     '                              <tr><td><img src="http://blog.timeneye.com/wp-content/uploads/2014/11/Android-app-store.png" height="70" width="250"></td>'+
@@ -679,7 +675,7 @@ const EmailonRegistration = async (name,qrcode,eventName,eventid,email)=>{
         '                          <img src="http://www.elementsculmyca.com/images/logo.png" style="display:block;background-color:#1f2533;color:#010101;padding:10px;padding-left:30px" alt="" border="0" height="100" >'+
         '                        </a>'+
         '                      </td>'+
-        '                      <td valign="top" width="300" style="background-color:#1f2533;color:#ffffff;font-size:14px;font-family:Arial,sans-serif;text-align:right;padding:20px 20px 0px 0px;word-spacing:1px"><span style="font-size:20px;font-weight:bold;">ELEMENTS CULMYCA\'18<br/><small>Annual cultural and technical fest</small></span><br><br>YMCA University of Science and Technology<br/>Faridabad, Haryana, India- 121006</td>'+
+        '                      <td valign="top" width="300" style="background-color:#1f2533;color:#ffffff;font-size:14px;font-family:Arial,sans-serif;text-align:right;padding:20px 20px 0px 0px;word-spacing:1px"><span style="font-size:20px;font-weight:bold;">ELEMENTS CULMYCA\'19<br/><small>Annual cultural and technical fest</small></span><br><br>YMCA University of Science and Technology<br/>Faridabad, Haryana, India- 121006</td>'+
         '                    </tr>'+
         '                  </tbody></table>'+
         '                </td>'+
@@ -818,7 +814,7 @@ const EmailonRegistration = async (name,qrcode,eventName,eventid,email)=>{
         '                        <tbody><tr>'+
         '                          <td valign="top" width="540" style="color:#666666;font-size:12px;font-family:Arial,sans-serif;text-align:justify;padding:30px 0 40px;line-height:20px">'+
         '                            <span style="font-size:12px">'+
-        '                              <b> Download Culmyca\'18 android application to view and manage all your registrations at one place.</b>'+
+        '                              <b> Download Culmyca\'19 android application to view and manage all your registrations at one place.</b>'+
         '                            </span>'+
         '                            <table>'+
         '                              <tr><td><img src="http://blog.timeneye.com/wp-content/uploads/2014/11/Android-app-store.png" height="70" width="250"></td>'+
