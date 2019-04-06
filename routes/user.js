@@ -12,6 +12,9 @@ var Registraion = require('../models/registrations');
 var Sponsor = require('../models/sponsors');
 var User = require('../models/users')
 var path = require('path')
+var jwt = require('jsonwebtoken'); 
+var Admin = require('../models/admins');
+var config = require('../config'); 
 
 //-----------------------------------------Generate OTP----------------------------------------------------------//
 
@@ -243,16 +246,40 @@ router.get('/updatepayment',function(req,res){
 	res.render('updatepayment');
 });
 
-router.post('/updatepayment',function(req,res){
-
-	var qrcode = req.body.qrcode;
-	var myquery = { qrcode: qrcode };
-	var newvalues = {$set: { paymentstatus: 'true' } };
-	Registraion.updateOne(myquery, newvalues, function(err, res) {
-		if (err) throw err;
-	});	
-	res.redirect('/');
-
+router.post('/api/updatepayment',function(req,res){
+	var token = req.body.token;
+    var userId;
+    if (!token) 
+      res.status(200).send({'msg': 'No token provided.' });
+    jwt.verify(token, config.secret, function(err, decoded) {      
+      if (err) 
+        res.status(200).send({'msg': 'Failed to authenticate token.' });    
+      userId = decoded.id;
+    });
+    Admin.findById(userId,(error,admin)=>{
+    	console.log(admin);
+      if(error)
+        res.send({'msg':'Server Error'});
+      else
+      {
+        if(admin.username=='Brixx')
+        {
+			var qrcode = req.body.qrcode;
+			var myquery = { qrcode: qrcode };
+			var newvalues = {$set: { paymentstatus: 'true' } };
+			Registraion.updateOne(myquery, newvalues, function(err, result) {
+				if (err) 
+					res.send({"msg":"error"})
+				else
+					res.send({"msg":"success"})
+			});	
+	 	}
+	 	else
+	 	{
+	 		res.send({"msg":"Only Brixx is allowed"})
+	 	}
+	  }
+	});
 });
 
 //-----------------------------------------Update Arrival Status----------------------------------------------------------//
@@ -261,28 +288,55 @@ router.get('/updatearrival',function(req,res){
 	res.render('updatearrival');
 });
 
-router.post('/updatearrival',function(req,res){
-
-	var qrcode = req.body.qrcode;
-	Registraion.find({qrcode: qrcode}).then(function(result){
-		if(result[0].paymentstatus)
-		{	
-			var myquery = { qrcode: qrcode };
-			var newvalues = {$set: { arrived: 'true' } };
-			Registraion.updateOne(myquery, newvalues, function(err, res) {
-				if (err) throw err;
-			});	
-			res.redirect('/');	
-		}
-		else
-		{
-			var obj = {
-			    status: 'Payment Not Done Till Now'
-			};
-			res.json(obj);
-		}
+router.post('/api/updatearrival',function(req,res){
+	var token = req.body.token;
+    var userId;
+    if (!token) 
+      res.status(200).send({'msg': 'No token provided.' });
+    jwt.verify(token, config.secret, function(err, decoded) {      
+      if (err) 
+        res.status(200).send({'msg': 'Failed to authenticate token.' });    
+      userId = decoded.id;
+    });
+    Admin.findById(userId,(error,admin)=>{
+    	console.log(admin);
+      if(error)
+        res.send({'msg':'Server Error'});
+      else
+      {
+		var qrcode = req.body.qrcode;
+		Registraion.find({qrcode: qrcode}).then(async function(result){
+			var eventDetails = await Event.findById(result[0].eventid);
+			console.log(eventDetails);
+			var clubname = eventDetails.clubname;
+			if(admin.username==clubname)
+			{
+				if(result[0].paymentstatus)
+				{	
+					var myquery = { qrcode: qrcode };
+					var newvalues = {$set: { arrived: 'true' } };
+					Registraion.updateOne(myquery, newvalues, function(err, val) {
+						if (err) 
+							res.json({"msg":"Server error"});
+						else
+							res.json({"msg":"Arrived Status Updated"})
+					});	
+				}
+				else
+				{
+					var obj = {
+					    "msg": 'Payment Not Done Till Now'
+					};
+					res.json(obj);
+				}
+			}
+			else
+			{
+				res.send({"msg":"Cannot change status for other club events"});
+			}
+		});
+	  }
 	});
-
 });
 
 
