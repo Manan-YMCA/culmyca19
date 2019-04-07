@@ -17,6 +17,8 @@
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
+    "fs": "0.0.1-security",
+    "html-pdf": "^2.2.0",
     "jsonwebtoken": "^8.5.0",
     "mongoose": "^5.4.4",
     "nodemon": "^1.18.9",
