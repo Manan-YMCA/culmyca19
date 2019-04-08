@@ -373,10 +373,10 @@ router.post('/deletesponsor',BrixxloggedIn,function(req,res){
 
 /*-----------------------------------GET ROUTE FOR GETTING REGISTRATION BY EVENTNAME-----------------------------------*/
 
-router.get('/:clubname/:eventid',function(req,res){
+router.get('/:clubname/:eventname',function(req,res){
   var clubname = req.params.clubname;
-  var eventid = req.params.eventid;
-  Registration.find({eventid: eventid}).then(function(result){
+  var eventname = req.params.eventname;
+  Registration.find({eventname: eventname}).then(function(result){
     res.json(result);
   });
 });
