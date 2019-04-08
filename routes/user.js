@@ -667,7 +667,7 @@ router.get('/pdf/:qrcode',(req,res)=>{
                     '                                <img src="https://ci3.googleusercontent.com/proxy/SyVYUNSQvbO4Vpaz4vI18sLBe2mw869TmO_vsG2pCeAKavB7aEfM4-d-6da_55SKmc90xda9joSORt4Lnq5JrfJ1u0uoUOkq0yze=s0-d-e1-ft#http://in.bmscdn.com/webin/emailer/helpline-phone.png" alt="helpline phone" width="18" height="20" border="0" >'+
                     '                              </td>'+
                     '                              <td style="width:105px;vertical-align:top;padding:25px 0 15px 10px;text-align:left;background-color:#1f2533;color:#49ba8e;line-height:14px;font-size:12px;font-weight:bold">'+
-                    '                                <a href="tel:+91 79884 81668" style="text-decoration:none;color:#49ba8e" target="_blank">Ph: 9953764100</a>'+
+                    '                                <a href="tel:+91 82228 31183" style="text-decoration:none;color:#49ba8e" target="_blank">Ph: 8222831183</a>'+
                     '                                '+
                     '                              </td>'+
                     '                            </tr>'+
@@ -707,7 +707,7 @@ const EmailonRegistration = async (name,qrcode,eventName,eventid,email)=>{
 	console.log(date)
 	const msg = {
 	  to: email,
-	  from: `Elements Culmyca'19<manantechnosurge@gmail.com>`,
+	  from: `Elements Culmyca'19<manmeetrana06@gmail.com>`,
 	  subject:"Congratulations! You have been registered",
 	  html : '<html>'+
         '<head>'+
@@ -888,7 +888,7 @@ const EmailonRegistration = async (name,qrcode,eventName,eventid,email)=>{
         '                                <img src="https://ci3.googleusercontent.com/proxy/SyVYUNSQvbO4Vpaz4vI18sLBe2mw869TmO_vsG2pCeAKavB7aEfM4-d-6da_55SKmc90xda9joSORt4Lnq5JrfJ1u0uoUOkq0yze=s0-d-e1-ft#http://in.bmscdn.com/webin/emailer/helpline-phone.png" alt="helpline phone" width="18" height="20" border="0" >'+
         '                              </td>'+
         '                              <td style="width:105px;vertical-align:top;padding:25px 0 15px 10px;text-align:left;background-color:#1f2533;color:#49ba8e;line-height:14px;font-size:12px;font-weight:bold">'+
-        '                                <a href="tel:+91 79884 81668" style="text-decoration:none;color:#49ba8e" target="_blank">Ph: 9953764100</a>'+
+        '                                <a href="tel:+91 82228 31183" style="text-decoration:none;color:#49ba8e" target="_blank">Ph: 8222831183</a>'+
         '                                '+
         '                              </td>'+
         '                            </tr>'+
