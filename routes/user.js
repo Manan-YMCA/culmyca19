@@ -5,7 +5,7 @@ var rn = require('random-number');
 var uniqid = require('uniqid');
 var async = require("async");
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+sgMail.setApiKey('your key');
 var Otp = require('../models/otps');
 var Event = require('../models/events');
 var Registraion = require('../models/registrations');
@@ -38,7 +38,7 @@ router.post('/sendotp',function(req,res){
 	var otp = generateRandom();
 	var options = { method: 'GET',
 	  		//https://2factor.in/API/V1/{api_key}/SMS/{phone_number}/{otp}/{template_name}
-	  	url: 'https://2factor.in/API/V1/9983a223-ae79-11e6-a40f-00163ef91450/SMS/'+phone+'/'+otp+'/culmyca18',
+	  	url: 'Your url'+phone+'/'+otp+'/culmyca18',
   		headers: { 'content-type': 'application/x-www-form-urlencoded' },
   		form: {} };
 
@@ -102,7 +102,7 @@ router.post('/verifyotp',function(req,res){
 			console.log(session_id);
 			var options = { method: 'GET',
 				  //https://2factor.in/API/V1/{api_key}/SMS/VERIFY/{session_id}/{otp_input}
-			  url: 'https://2factor.in/API/V1/9983a223-ae79-11e6-a40f-00163ef91450/SMS/VERIFY/'+session_id+'/'+otp,
+			  url: 'Your url'+session_id+'/'+otp,
 			  headers: { 'content-type': 'application/x-www-form-urlencoded' },
 			  form: {} };
 
